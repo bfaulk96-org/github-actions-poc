@@ -26,6 +26,11 @@ jobs:
         run: npm run check-types
       - name: Lint Repo
         run: npm run lint:ci
+      - name: Build
+        run: |
+          npm run build
+          rm -rf .git
+          rm -rf node_modules/.cache
       - name: Run Tests
         run: npm run test:ci
   publish:
