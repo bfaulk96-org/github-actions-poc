@@ -69,7 +69,7 @@ jobs:
               icon_emoji: ':hammer_and_wrench:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_WORKFLOW}: ${"${{ job.status }}".toUpperCase()}\n${process.env.AS_REPO}@${process.env.AS_REF}\nBy: ${process.env.AS_AUTHOR}\nDuration: ${process.env.AS_TOOK}`
+                text: `${process.env.AS_REPO} ${process.env.AS_REF.replace(/.*\//, '')}\n${process.env.AS_WORKFLOW}: ${"${{ job.status }}".toUpperCase()}\n${process.env.AS_AUTHOR} [${process.env.AS_TOOK}]`
               }]
             }
         env:
