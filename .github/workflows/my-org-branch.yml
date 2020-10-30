@@ -10,7 +10,7 @@ jobs:
   extract_branch:
     runs-on: ubuntu-latest
     steps:
-      run: echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - run: echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_ENV
   build_and_test:
     runs-on: ubuntu-latest
     steps:
