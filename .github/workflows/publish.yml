@@ -40,11 +40,13 @@ jobs:
           node-version: 12
 #          registry-url: https://npm.platforms.engineering
           registry-url: https://registry.npmjs.org
-#      - run: npm config set registry https://registry.npmjs.org
+      - name: Set Up npm
+        run: npm config set registry https://registry.npmjs.org
 #      - run: npm config set @other:registry https://npm.platforms.engineering
-      - name: Install Dependencies
-        run: npm ci
+#      - name: Install Dependencies
+#        run: npm ci
       - name: Publish
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+        run: echo Publishing...
+#        run: npm publish
+#        env:
+#          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
