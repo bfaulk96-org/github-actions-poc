@@ -9,12 +9,17 @@ jobs:
     outputs:
       branch_name: ${{ steps.extract.outputs.var }}
     steps:
+      - name: Extract Branch Name
       - id: extract
         run: echo "::set-output name=var::${GITHUB_REF##*/}"
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - name: Setup npm
+        run: |
+          npm config set registry https://registry.npmjs.org
+#          npm config set @other:registry https://npm.platforms.engineering
       - name: Install Dependencies
         run: npm ci
       - name: Check Types
@@ -33,9 +38,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-          registry-url: https://npm.platforms.engineering
-      - run: echo Publishing...
-#      - run: npm ci
-#      - run: npm publish
-#        env:
-#          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+#          registry-url: https://npm.platforms.engineering
+          registry-url: https://registry.npmjs.org
+#      - run: npm config set registry https://registry.npmjs.org
+#      - run: npm config set @other:registry https://npm.platforms.engineering
+      - name: Install Dependencies
+        run: npm ci
+      - name: Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
