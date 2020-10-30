@@ -33,8 +33,6 @@ jobs:
           rm -rf node_modules/.cache
       - name: Run Tests
         run: npm run test:ci
-      - name: Shouldn't happen?
-        run: echo Why though
   publish:
     if: ${{ needs.build_and_test.outputs.branch_name == 'main' }}
     needs:
