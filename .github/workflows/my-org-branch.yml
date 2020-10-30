@@ -11,7 +11,7 @@ env:
 jobs:
   extract_branch:
     runs-on: ubuntu-latest
-    if: ${{ $BRANCH_NAME != 'main' }}
+    if: ${{ env.BRANCH_NAME != 'main' }}
     steps:
       - run: |
           echo "BRANCH_NAME=${GITHUB_REF##*/}"
