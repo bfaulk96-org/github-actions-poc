@@ -25,8 +25,8 @@ jobs:
         run: npm run lint:ci
       - name: Run Tests
         run: npm run test:ci
-  if: ${{ github.event_name != 'pull_request' && needs.extract_branch.outputs.branch_name == 'main' }}
   publish-npm:
+    if: ${{ github.event_name != 'pull_request' && needs.extract_branch.outputs.branch_name == 'main' }}
     needs:
       - build_and_test
     runs-on: ubuntu-latest
