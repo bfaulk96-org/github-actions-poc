@@ -10,6 +10,7 @@ jobs:
   extract_branch:
     runs-on: ubuntu-latest
     steps:
+      - run: echo "Adding branch_name=${GITHUB_REF##*/} to ENV variables..."
       - run: echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_ENV
   build_and_test:
     runs-on: ubuntu-latest
@@ -40,4 +41,5 @@ jobs:
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
       - run: echo ${branch_name}
-      - run: echo {{ $branch_name }}}
+      - run: echo {{ $branch_name }}
+      - run: echo "branch name is ${branch_name}"
