@@ -10,13 +10,13 @@ jobs:
       branch_name: ${{ steps.extract.outputs.var }}
     steps:
       - name: Extract Branch Name
-      - id: extract
+        id: extract
         run: echo "::set-output name=var::${GITHUB_REF##*/}"
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - name: Setup npm
+      - name: Set Up npm
         run: |
           npm config set registry https://registry.npmjs.org
 #          npm config set @other:registry https://npm.platforms.engineering
