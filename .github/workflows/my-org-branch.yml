@@ -18,7 +18,7 @@ jobs:
     env:
       BRANCH_NAME: ${{ needs.extract_branch.outputs.branch_name }}
     needs: extract_branch
-    if: ${{ github.event_name == 'pull_request' }} || "${BRANCH_NAME}" == @(develop|non-prod|main)
+    if: ${{ github.event_name == 'pull_request' }} || "${BRANCH_NAME}" == @(develop|non-prod|mainz)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
