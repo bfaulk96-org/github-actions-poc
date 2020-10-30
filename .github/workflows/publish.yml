@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       branch_name: ${{ steps.extract.outputs.var }}
+      status: ${{ steps.finish.outputs.status }}
     steps:
       - name: Extract Branch Name
         id: extract
@@ -16,6 +17,11 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - name: COMPOSITE TEST
+        id: composite_build
+        uses: ${{ GITHUB_API_URL }}/.github/actions/build-and-test@v1
+        with:
+          who-to-greet: 'Mona the Octocat'
       - name: Set Up NPM
         run: |
           npm config set registry https://registry.npmjs.org
@@ -33,6 +39,10 @@ jobs:
           rm -rf node_modules/.cache
       - name: Run Tests
         run: npm run test:ci
+      - name: Finish
+        if: always()
+        id: finish
+        run: echo "::set-output name=status::${{ job.status }}"
   publish:
     if: ${{ needs.build_and_test.outputs.branch_name == 'main' }}
     needs: [ build_and_test ]
@@ -57,6 +67,7 @@ jobs:
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
       - name: Finish
+        if: always()
         id: finish
         run: echo "::set-output name=status::${{ job.status }}"
   slack_notify:
