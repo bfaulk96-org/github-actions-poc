@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, develop, non-prod ]
   pull_request:
-    branches: [ * ]
+    branches: [ '*' ]
 jobs:
   extract_branch:
     runs-on: ubuntu-latest
