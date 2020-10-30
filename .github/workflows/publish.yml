@@ -35,8 +35,7 @@ jobs:
         run: npm run test:ci
   publish:
     if: ${{ needs.build_and_test.outputs.branch_name == 'main' }}
-    needs:
-      - build_and_test
+    needs: [ build_and_test ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -56,6 +55,7 @@ jobs:
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
   slack_notify:
+    needs: [ publish ]
     if: always() # Pick up events even if the job fails or is canceled.
     runs-on: ubuntu-latest
     steps:
@@ -69,7 +69,7 @@ jobs:
               icon_emoji: ':hammer_and_wrench:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_WORKFLOW}: ${{ job.status }}\n${process.env.AS_REPO}@${process.env.AS_REF}\nby ${process.env.AS_AUTHOR} in ${process.env.AS_TOOK}`
+                text: `${process.env.AS_WORKFLOW}: ${"${{ job.status }}".toUpperCase()}\n${process.env.AS_REPO}@${process.env.AS_REF}\nBy: ${process.env.AS_AUTHOR}\nDuration: ${process.env.AS_TOOK}`
               }]
             }
         env:
