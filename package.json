@@ -22,6 +22,7 @@
     "build": "tsc",
     "test": "jest --config jestconfig.json",
     "test:ci": "npm test",
+    "check-types": "tsc --noemit",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
