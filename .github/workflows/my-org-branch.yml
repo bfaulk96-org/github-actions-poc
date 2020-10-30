@@ -7,7 +7,7 @@ on:
       - develop
       - non-prod
 env:
-  GITHUB_REF: {{ github.ref }}
+  GITHUB_REF: {{ $github.ref }}
 jobs:
   extract_branch:
     runs-on: ubuntu-latest
