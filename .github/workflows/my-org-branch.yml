@@ -6,6 +6,8 @@ on:
       - main
       - develop
       - non-prod
+env:
+  GITHUB_REF: {{ github.ref }}
 jobs:
   extract_branch:
     runs-on: ubuntu-latest
