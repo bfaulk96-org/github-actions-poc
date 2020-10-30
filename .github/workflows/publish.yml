@@ -28,7 +28,7 @@ jobs:
         run: npm run lint:ci
       - name: Run Tests
         run: npm run test:ci
-  publish-npm:
+  publish:
     if: ${{ needs.build_and_test.outputs.branch_name == 'main' }}
     needs:
       - build_and_test

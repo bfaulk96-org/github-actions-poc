@@ -1,8 +1,8 @@
 {
-  "name": "anagram-matcher",
+  "name": "github-actions-poc",
   "version": "1.0.0",
-  "description": "Checks sentences for anagram matches",
-  "repository": "https://github.com/bfaulk96/anagram-matcher",
+  "description": "Strictly a POC for github actions",
+  "repository": "https://github.com/bfaulk96-org/github-actions-poc",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "bfaulk96",
