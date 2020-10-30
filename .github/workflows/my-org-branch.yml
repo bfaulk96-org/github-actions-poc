@@ -7,7 +7,7 @@ on:
       - develop
       - non-prod
 env:
-  BRANCH_NAME: ${{ echo "${GITHUB_REF##*/}" }}
+  BRANCH_NAME: ${{ "${GITHUB_REF##*/}" }}
 jobs:
   extract_branch:
     runs-on: ubuntu-latest
