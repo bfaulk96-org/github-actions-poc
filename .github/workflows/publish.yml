@@ -18,7 +18,7 @@ jobs:
           node-version: 12
       - name: COMPOSITE TEST
         id: composite_build
-        uses: "${{ env.GITHUB_API_URL }}/.github/actions/build-and-test@v1"
+        uses: ${{ env.GITHUB_API_URL }}/.github/actions/build-and-test@v1
         with:
           who-to-greet: 'Mona the Octocat'
       - name: Set Up NPM
