@@ -42,6 +42,7 @@ jobs:
 #      - run: npm publish
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-      - run: echo ${branch_name}
-      - run: echo {{ $branch_name }}
-      - run: echo "branch name is ${branch_name}"
+      - run: echo $branch_name
+      - run: echo $env.branch_name
+      - run: echo "branch name is $branch_name"
+      - run: echo "branch name is $env.branch_name"
