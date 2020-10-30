@@ -32,7 +32,7 @@ jobs:
     needs:
       - extract_branch
       - build_and_test
-    if: ${{ needs.extract_branch.outputs.branch_name == 'main' }}
+    if: ${{ github.event_name != 'pull_request' && needs.extract_branch.outputs.branch_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -40,6 +40,7 @@ jobs:
         with:
           node-version: 12
           registry-url: https://npm.platforms.engineering
+      - run: echo Publishing...
 #      - run: npm ci
 #      - run: npm publish
 #        env:
