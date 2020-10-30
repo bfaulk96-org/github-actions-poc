@@ -6,14 +6,12 @@ on:
       - main
       - develop
       - non-prod
-env:
-  GITHUB_REF: $github.ref
 jobs:
   extract_branch:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Adding branch_name=${GITHUB_REF##*/} to ENV variables..."
-      - run: echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - run: echo "BRANCH_NAME=${$GITHUB_REF##*/}"
+      - run: echo "BRANCH_NAME=${$GITHUB_REF##*/}" >> $GITHUB_ENV
   build_and_test:
     runs-on: ubuntu-latest
     steps:
