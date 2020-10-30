@@ -24,7 +24,9 @@ jobs:
       - run: npm run test:ci
       - run: npm run build
   publish-npm:
-    needs: build
+    needs:
+      - extract_branch
+      - build_and_test
     if: ${{ true == false }}
     runs-on: ubuntu-latest
     steps:
