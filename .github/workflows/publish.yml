@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       branch_name: ${{ steps.extract.outputs.var }}
-      status: ${{ steps.finish.outputs.status }}
     steps:
       - name: Extract Branch Name
         id: extract
@@ -19,7 +18,7 @@ jobs:
           node-version: 12
       - name: COMPOSITE TEST
         id: composite_build
-        uses: ${{ GITHUB_API_URL }}/.github/actions/build-and-test@v1
+        uses: $GITHUB_API_URL/.github/actions/build-and-test@v1
         with:
           who-to-greet: 'Mona the Octocat'
       - name: Set Up NPM
@@ -39,16 +38,10 @@ jobs:
           rm -rf node_modules/.cache
       - name: Run Tests
         run: npm run test:ci
-      - name: Finish
-        if: always()
-        id: finish
-        run: echo "::set-output name=status::${{ job.status }}"
   publish:
     if: ${{ needs.build_and_test.outputs.branch_name == 'main' }}
     needs: [ build_and_test ]
     runs-on: ubuntu-latest
-    outputs:
-      status: ${{ steps.finish.outputs.status }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -66,17 +59,12 @@ jobs:
 #        run: npm publish
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-      - name: Finish
-        if: always()
-        id: finish
-        run: echo "::set-output name=status::${{ job.status }}"
   slack_notify:
-    needs: [ publish ]
+    needs: [ build_and_test, publish ]
     if: always() # Pick up events even if the job fails or is canceled.
     runs-on: ubuntu-latest
-    env:
-      status: ${{ needs.publish.outputs.status }}
     steps:
+      - uses: technote-space/workflow-conclusion-action@v1.1.1
       - uses: 8398a7/action-slack@v3
         with:
           status: custom
@@ -86,8 +74,8 @@ jobs:
               username: 'Github CI',
               icon_emoji: ':hammer_and_wrench:',
               attachments: [{
-                color: '${{ env.status }}' === 'success' ? 'good' : '${{ env.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_REPO} ${process.env.AS_REF.replace(/.*\//, '')}\n${process.env.AS_WORKFLOW}: ${"${{ env.status }}".toUpperCase()}\n${process.env.AS_AUTHOR} [${process.env.AS_TOOK}]`
+                color: '${{ env.WORKFLOW_CONCLUSION }}' === 'success' ? 'good' : '${{ env.WORKFLOW_CONCLUSION }}' === 'failure' ? 'danger' : 'warning',
+                text: `${process.env.AS_REPO} ${process.env.AS_REF.replace(/.*\//, '')}\n${process.env.AS_WORKFLOW}: ${"${{ env.WORKFLOW_CONCLUSION }}".toUpperCase()}\n${process.env.AS_AUTHOR} [${process.env.AS_TOOK}]`
               }]
             }
         env:
