@@ -12,7 +12,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Start
-        run: echo "Starting GH Workflow for PRs."
+        run: |
+          echo "Starting GH Workflow for pull request."
+          npm ci
 
       - name: Lint
         run: npm run lint:ci
