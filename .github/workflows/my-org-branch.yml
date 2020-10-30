@@ -2,10 +2,9 @@ name: Build Branch
 
 on:
   push:
-    branches:
-      - main
-      - develop
-      - non-prod
+    branches: [ main, develop, non-prod ]
+  pull_request:
+    branches: [ * ]
 jobs:
   extract_branch:
     runs-on: ubuntu-latest
@@ -18,15 +17,12 @@ jobs:
     env:
       BRANCH_NAME: ${{ needs.extract_branch.outputs.branch_name }}
     needs: extract_branch
-    if: ${{ github.event_name == 'pull_request' }} || "${BRANCH_NAME}" == @(develop|non-prod|mainz)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: echo $BRANCH_NAME
-      - run: echo $env.BRANCH_NAME
       - run: npm ci
       - run: npm run check-types
       - run: npm run lint:ci
@@ -44,7 +40,6 @@ jobs:
         with:
           node-version: 12
           registry-url: https://npm.platforms.engineering
-      - run: echo yay?
 #      - run: npm ci
 #      - run: npm publish
 #        env:
