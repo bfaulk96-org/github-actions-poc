@@ -9,6 +9,7 @@ jobs:
     outputs:
       branch_name: ${{ steps.extract.outputs.var }}
     steps:
+      - uses: actions/checkout@v2
       - name: Extract Branch Name
         id: extract
         run: echo "::set-output name=var::${GITHUB_REF##*/}"
@@ -16,9 +17,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - uses: daspn/private-actions-checkout@v2
+          with:
+            actions_list: '["github.com/bfaulk-org/.github@v1"]'
+            checkout_base_path: ./.github/actions
       - name: COMPOSITE TEST
         id: composite_build
-        uses: "https://github.com/bfaulk96-org/.github/actions/build-and-test@v1"
+        uses: ./.github/actions/build-and-test
         with:
           who-to-greet: 'Mona the Octocat'
       - name: Set Up NPM
@@ -64,7 +69,7 @@ jobs:
     if: always() # Pick up events even if the job fails or is canceled.
     runs-on: ubuntu-latest
     steps:
-      # https://github.com/technote-space/workflow-conclusion-action
+      # https://github.com/marketplace/actions/workflow-conclusion-action
       - uses: technote-space/workflow-conclusion-action@v1.1.1
       # https://github.com/marketplace/actions/action-slack
       # https://action-slack.netlify.app/
