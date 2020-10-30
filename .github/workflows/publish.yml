@@ -75,8 +75,8 @@ jobs:
               username: 'Github CI',
               icon_emoji: ':hammer_and_wrench:',
               attachments: [{
-                color: '${{ status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_REPO} ${process.env.AS_REF.replace(/.*\//, '')}\n${process.env.AS_WORKFLOW}: ${"${{ status }}".toUpperCase()}\n${process.env.AS_AUTHOR} [${process.env.AS_TOOK}]`
+                color: '${{ $status }}' === 'success' ? 'good' : '${{ $status }}' === 'failure' ? 'danger' : 'warning',
+                text: `${process.env.AS_REPO} ${process.env.AS_REF.replace(/.*\//, '')}\n${process.env.AS_WORKFLOW}: ${"${{ $status }}".toUpperCase()}\n${process.env.AS_AUTHOR} [${process.env.AS_TOOK}]`
               }]
             }
         env:
