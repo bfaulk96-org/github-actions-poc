@@ -1,9 +1,11 @@
-import { containsAllLetters, findMatchesInArray } from '../index';
+import { uselessNegate } from '../index';
 
-describe(containsAllLetters, () => {
-  test.todo('complete tests');
-});
+describe(uselessNegate, () => {
+  test('should return false if true is passed in', () => {
+    expect(uselessNegate(true)).toBeFalsy();
+  });
 
-describe(findMatchesInArray, () => {
-  test.todo('complete tests');
+  test('should return true if false is passed in', () => {
+    expect(uselessNegate(false)).toBeTruthy();
+  });
 });
