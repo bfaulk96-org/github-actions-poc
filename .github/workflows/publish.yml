@@ -9,7 +9,7 @@ jobs:
     outputs:
       branch_name: ${{ steps.extract.outputs.var }}
     env:
-      user: ${{ env.GITHUB_ACTOR }}
+      user: ${{ GITHUB_ACTOR }}
     steps:
       - name: Extract Branch Name
         id: extract
