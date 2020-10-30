@@ -17,10 +17,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - uses: daspn/private-actions-checkout@v2
-          with:
-            actions_list: '["github.com/bfaulk-org/.github@v1"]'
-            checkout_base_path: ./.github/actions
+      - uses: daspn/private-actions-checkout@v2 # https://github.com/marketplace/actions/private-actions-checkout
+        with:
+          actions_list: '["github.com/bfaulk-org/.github@v1"]'
+          checkout_base_path: ./.github/actions
       - name: COMPOSITE TEST
         id: composite_build
         uses: ./.github/actions/build-and-test
@@ -69,11 +69,8 @@ jobs:
     if: always() # Pick up events even if the job fails or is canceled.
     runs-on: ubuntu-latest
     steps:
-      # https://github.com/marketplace/actions/workflow-conclusion-action
-      - uses: technote-space/workflow-conclusion-action@v1.1.1
-      # https://github.com/marketplace/actions/action-slack
-      # https://action-slack.netlify.app/
-      - uses: 8398a7/action-slack@v3
+      - uses: technote-space/workflow-conclusion-action@v1.1.1 # https://github.com/marketplace/actions/workflow-conclusion-action
+      - uses: 8398a7/action-slack@v3 # https://github.com/marketplace/actions/action-slack, https://action-slack.netlify.app/
         with:
           status: custom
           fields: workflow,job,commit,repo,ref,author,took
