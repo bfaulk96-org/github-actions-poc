@@ -1,6 +1,6 @@
 {
   "name": "github-actions-poc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Strictly a POC for github actions",
   "repository": "https://github.com/bfaulk96-org/github-actions-poc",
   "main": "lib/index.js",
