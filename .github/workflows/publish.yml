@@ -37,6 +37,8 @@ jobs:
     if: ${{ needs.build_and_test.outputs.branch_name == 'main' }}
     needs: [ build_and_test ]
     runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.finish.outputs.status }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -54,10 +56,15 @@ jobs:
 #        run: npm publish
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - name: Finish
+        id: finish
+        run: echo "::set-output name=status::${GITHUB_REF##*/}"
   slack_notify:
     needs: [ publish ]
     if: always() # Pick up events even if the job fails or is canceled.
     runs-on: ubuntu-latest
+    env:
+      status: ${{ needs.publish.outputs.status }}
     steps:
       - uses: 8398a7/action-slack@v3
         with:
@@ -68,8 +75,8 @@ jobs:
               username: 'Github CI',
               icon_emoji: ':hammer_and_wrench:',
               attachments: [{
-                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_REPO} ${process.env.AS_REF.replace(/.*\//, '')}\n${process.env.AS_WORKFLOW}: ${"${{ job.status }}".toUpperCase()}\n${process.env.AS_AUTHOR} [${process.env.AS_TOOK}]`
+                color: '${{ status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                text: `${process.env.AS_REPO} ${process.env.AS_REF.replace(/.*\//, '')}\n${process.env.AS_WORKFLOW}: ${"${{ status }}".toUpperCase()}\n${process.env.AS_AUTHOR} [${process.env.AS_TOOK}]`
               }]
             }
         env:
