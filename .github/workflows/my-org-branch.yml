@@ -15,6 +15,10 @@ jobs:
       - id: extract
         run: echo "::set-output name=var::${GITHUB_REF##*/}"
   build_and_test:
+    env:
+      BRANCH_NAME: ${{ needs.extract_branch.outputs.branch_name }}
+    needs: extract_branch
+    if: ${{ github.event_name == 'pull_request' || $BRANCH_NAME == 'develop' || $BRANCH_NAME == 'non-prod' || $BRANCH_NAME == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +36,7 @@ jobs:
     needs:
       - extract_branch
       - build_and_test
-    if: ${{ true == false || needs.extract_branch.outputs.branch_name == 'nope' }}
+    if: ${{ needs.extract_branch.outputs.branch_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
