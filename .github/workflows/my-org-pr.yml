@@ -1,11 +1,11 @@
-name: My Org Pull Request CI
+name: PR Build
 
 on:
   pull_request:
     branches: [ main ]
 
 jobs:
-  build:
+  build_pr:
     runs-on: ubuntu-latest
 
     steps:
