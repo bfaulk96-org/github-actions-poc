@@ -57,6 +57,7 @@ jobs:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
   slack_notify:
     if: always() # Pick up events even if the job fails or is canceled.
+    runs-on: ubuntu-latest
     steps:
       - uses: 8398a7/action-slack@v3
         with:
