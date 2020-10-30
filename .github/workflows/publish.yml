@@ -58,7 +58,7 @@ jobs:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
       - name: Finish
         id: finish
-        run: echo "::set-output name=status::${GITHUB_REF##*/}"
+        run: echo "::set-output name=status::${{ job.status }}"
   slack_notify:
     needs: [ publish ]
     if: always() # Pick up events even if the job fails or is canceled.
