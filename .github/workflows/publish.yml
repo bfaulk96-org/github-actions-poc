@@ -9,7 +9,6 @@ jobs:
     outputs:
       branch_name: ${{ steps.extract.outputs.var }}
     steps:
-      - uses: actions/checkout@v2
       - name: Extract Branch Name
         id: extract
         run: echo "::set-output name=var::${GITHUB_REF##*/}"
@@ -19,7 +18,7 @@ jobs:
           node-version: 12
       - uses: daspn/private-actions-checkout@v2 # https://github.com/marketplace/actions/private-actions-checkout
         with:
-          actions_list: '["github.com/bfaulk-org/.github@v1"]'
+          actions_list: '["${{GITHUB_ACTOR}}@github.com/bfaulk-org/.github@v1"]'
           checkout_base_path: ./.github/actions
       - name: COMPOSITE TEST
         id: composite_build
