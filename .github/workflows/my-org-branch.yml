@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "BRANCH_NAME=${GITHUB_REF##*/}"
-      - run: echo "BRANCH_NAME=${$GITHUB_REF##*/}" >> $GITHUB_ENV
+      - run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
   build_and_test:
     runs-on: ubuntu-latest
     steps:
@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - run: echo $BRANCH_NAME
+      - run: echo $env.BRANCH_NAME
       - run: npm ci
       - run: npm run check-types
       - run: npm run lint:ci
@@ -28,19 +30,15 @@ jobs:
     needs:
       - extract_branch
       - build_and_test
-#    if: ${{ true == false }}
+    if: ${{ true == false }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-#          registry-url: https://npm.platforms.engineering
-#      - run: npm ci
-#      - run: npm publish
-#        env:
-#          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-      - run: echo $branch_name
-      - run: echo $env.branch_name
-      - run: echo "branch name is $branch_name"
-      - run: echo "branch name is $env.branch_name"
+          registry-url: https://npm.platforms.engineering
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
