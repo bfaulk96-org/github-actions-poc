@@ -6,12 +6,16 @@ on:
       - main
       - develop
       - non-prod
+env:
+  BRANCH_NAME: "${GITHUB_REF##*/}"
 jobs:
   extract_branch:
     runs-on: ubuntu-latest
+    if: ${{ $BRANCH_NAME != 'main' }}
     steps:
-      - run: echo "BRANCH_NAME=${GITHUB_REF##*/}"
-      - run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - run: |
+          echo "BRANCH_NAME=${GITHUB_REF##*/}"
+          echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
   build_and_test:
     runs-on: ubuntu-latest
     steps:
