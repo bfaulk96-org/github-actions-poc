@@ -35,7 +35,7 @@ jobs:
           if-no-files-found: error
       - name: Build and Test
         id: build_and_test
-        uses: "${shared_lib_path}/build-and-test"
+        uses: "$shared_lib_path/build-and-test"
   publish:
     if: ${{ github.github_ref == 'refs/heads/main' }}
     needs: [ build_and_test ]
@@ -68,4 +68,4 @@ jobs:
           if-no-files-found: error
       - name: Slack Notify
         id: slack_notify
-        uses: "${shared_lib_path}/build-and-test"
+        uses: "$shared_lib_path/build-and-test"
