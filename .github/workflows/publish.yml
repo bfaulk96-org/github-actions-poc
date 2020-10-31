@@ -18,7 +18,7 @@ jobs:
         id: build_and_test
         uses: ./.github/org-actions/actions/build-and-test
   publish:
-    if: ${{ env.GITHUB_REF == 'refs/heads/main' }}
+    if: ${{ $GITHUB_REF == 'refs/heads/main' }}
     needs: [ build_and_test ]
     runs-on: ubuntu-latest
     steps:
