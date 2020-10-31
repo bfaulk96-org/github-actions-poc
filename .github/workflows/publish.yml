@@ -8,19 +8,34 @@ on:
   push:
     branches: [ main, develop, non-prod ]
 jobs:
-  build_and_test:
+  checkout_shared_lib:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - uses: actions/checkout@v2 # https://github.com/actions/checkout
         with:
           repository: $shared_lib_repo
           ssh-key: $shared_lib_private_key
           ref: $shared_lib_version
           path: $shared_lib_path
+      - name: Upload shared actions
+        uses: actions/upload-artifact@v1
+        with:
+          name: shared
+          path: "$shared_lib_path/actions"
+          retention-days: 1
+  build_and_test:
+    needs: [ checkout_shared_lib ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download shared actions
+          uses: actions/download-artifact@v2
+          with:
+            name: shared
+            if-no-files-found: error
       - name: Build and Test
         id: build_and_test
-        uses: ${{env.shared_lib_path}}/actions/build-and-test
+        uses: "${shared_lib_path}/build-and-test"
   publish:
     if: ${{ github.github_ref == 'refs/heads/main' }}
     needs: [ build_and_test ]
@@ -46,12 +61,11 @@ jobs:
     needs: [ build_and_test, publish ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2 # https://github.com/actions/checkout
+      - name: Download shared actions
+        uses: actions/download-artifact@v2
         with:
-          repository: $shared_lib_repo
-          ssh-key: $shared_lib_private_key
-          ref: $shared_lib_version
-          path: $shared_lib_path
+          name: shared
+          if-no-files-found: error
       - name: Slack Notify
         id: slack_notify
-        uses: ${{env.shared_lib_path}}/actions/slack-notify
+        uses: "${shared_lib_path}/build-and-test"
