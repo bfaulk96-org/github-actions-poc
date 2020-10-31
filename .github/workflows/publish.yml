@@ -29,7 +29,6 @@ jobs:
 #          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: COMPOSITE TEST
         id: composite_build
-        run: ls -R .github
         uses: ./.github/org-actions/build-and-test
         with:
           who-to-greet: 'Mona the Octocat'
