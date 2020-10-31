@@ -13,15 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2 # https://github.com/actions/checkout
         with:
-          repository: $shared_lib_repo
-          ssh-key: $shared_lib_private_key
-          ref: $shared_lib_version
-          path: $shared_lib_path
+          repository: ${{env.shared_lib_repo}}
+          ssh-key: ${{env.shared_lib_private_key}}
+          ref: ${{env.shared_lib_version}}
+          path: ${{env.shared_lib_path}}
       - name: Upload shared actions
         uses: actions/upload-artifact@v1
         with:
           name: shared
-          path: $shared_lib_path/actions
+          path: ${{env.shared_lib_path}}/actions
           retention-days: 1
   build_and_test:
     env:
