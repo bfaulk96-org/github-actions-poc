@@ -18,10 +18,11 @@ jobs:
           ref: ${{env.shared_lib_version}}
           path: ${{env.shared_lib_path}}
       - name: Upload shared actions
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: shared
           path: ${{env.shared_lib_path}}/actions
+          if-no-files-found: error
           retention-days: 1
   build_and_test:
     env:
@@ -34,7 +35,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: shared
-          if-no-files-found: error
+          path: ${{env.shared_lib_path}}
       - name: Build and Test
         id: build_and_test
         uses: ./.github/org-actions/build-and-test
@@ -67,7 +68,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: shared
-          if-no-files-found: error
+          path: ${{env.shared_lib_path}}
       - name: Slack Notify
         id: slack_notify
         uses: ./.github/org-actions/build-and-test
