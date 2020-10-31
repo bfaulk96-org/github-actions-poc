@@ -44,11 +44,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2 # https://github.com/actions/checkout
-          with:
-            repository: bfaulk96-org/.github
-            ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-            ref: v1
-            path: ./.github/org-actions
+        with:
+          repository: bfaulk96-org/.github
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ref: v1
+          path: ./.github/org-actions
       - name: Slack Notify
         id: slack_notify
         uses: ./.github/org-actions/actions/slack-notify
