@@ -29,10 +29,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Download shared actions
-          uses: actions/download-artifact@v2
-          with:
-            name: shared
-            if-no-files-found: error
+        uses: actions/download-artifact@v2
+        with:
+          name: shared
+          if-no-files-found: error
       - name: Build and Test
         id: build_and_test
         uses: "${shared_lib_path}/build-and-test"
