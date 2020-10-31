@@ -6,51 +6,20 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
-    outputs:
-      branch_name: ${{ steps.extract.outputs.var }}
     steps:
-      - name: Extract Branch Name
-        id: extract
-        run: echo "::set-output name=var::${GITHUB_REF##*/}"
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2 # https://github.com/actions/checkout
         with:
           repository: bfaulk96-org/.github
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ref: v1
           path: ./.github/org-actions
-#      - uses: daspn/private-actions-checkout@v2 # https://github.com/marketplace/actions/private-actions-checkout
-#        with:
-#          actions_list: '["bfaulk96-org/.github@v1"]'
-#          checkout_base_path: ./actions
-#          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: COMPOSITE TEST
-        id: composite_build
+      - name: Build and Test
+        id: build_and_test
         uses: ./.github/org-actions/actions/build-and-test
-        with:
-          who-to-greet: 'Mona the Octocat'
-      - name: Set Up NPM
-        run: |
-          npm config set registry https://registry.npmjs.org
-#          npm config set @other:registry https://npm.platforms.engineering
-      - name: Install Dependencies
-        run: npm ci
-      - name: Check Types
-        run: npm run check-types
-      - name: Lint Repo
-        run: npm run lint:ci
-      - name: Build
-        run: |
-          npm run build
-          rm -rf .git
-          rm -rf node_modules/.cache
-      - name: Run Tests
-        run: npm run test:ci
   publish:
-    if: ${{ needs.build_and_test.outputs.branch_name == 'main' }}
+    env:
+    if: ${{ contains(env.GITHUB_REF, "main") }}
     needs: [ build_and_test ]
     runs-on: ubuntu-latest
     steps:
@@ -70,24 +39,16 @@ jobs:
 #        run: npm publish
 #        env:
 #          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-  slack_notify:
+  slackNotify:
     needs: [ build_and_test, publish ]
-    if: always() # Pick up events even if the job fails or is canceled.
     runs-on: ubuntu-latest
     steps:
-      - uses: technote-space/workflow-conclusion-action@v1.1.1 # https://github.com/marketplace/actions/workflow-conclusion-action
-      - uses: 8398a7/action-slack@v3 # https://github.com/marketplace/actions/action-slack, https://action-slack.netlify.app/
-        with:
-          status: custom
-          fields: workflow,job,commit,repo,ref,author,took
-          custom_payload: |
-            {
-              username: 'Github CI',
-              icon_emoji: ':hammer_and_wrench:',
-              attachments: [{
-                color: '${{ env.WORKFLOW_CONCLUSION }}' === 'success' ? 'good' : '${{ env.WORKFLOW_CONCLUSION }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_REPO} ${process.env.AS_REF.replace(/.*\//, '')}\n${process.env.AS_WORKFLOW}: ${"${{ env.WORKFLOW_CONCLUSION }}".toUpperCase()}\n${process.env.AS_AUTHOR}`
-              }]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - uses: actions/checkout@v2 # https://github.com/actions/checkout
+          with:
+            repository: bfaulk96-org/.github
+            ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            ref: v1
+            path: ./.github/org-actions
+      - name: Slack Notify
+        id: slack_notify
+        uses: ./.github/org-actions/actions/slack-notify
