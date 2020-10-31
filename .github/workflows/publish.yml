@@ -29,9 +29,10 @@ jobs:
 #          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: COMPOSITE TEST
         id: composite_build
-        uses: ./.github/org-actions/build-and-test
-        with:
-          who-to-greet: 'Mona the Octocat'
+        run: ls -lR .
+#        uses: ./.github/org-actions/build-and-test
+#        with:
+#          who-to-greet: 'Mona the Octocat'
       - name: Set Up NPM
         run: |
           npm config set registry https://registry.npmjs.org
