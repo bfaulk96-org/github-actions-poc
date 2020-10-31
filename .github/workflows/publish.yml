@@ -8,22 +8,22 @@ on:
   push:
     branches: [ main, develop, non-prod ]
 jobs:
-  checkout_shared_lib:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2 # https://github.com/actions/checkout
-        with:
-          repository: ${{env.shared_lib_repo}}
-          ssh-key: ${{env.shared_lib_private_key}}
-          ref: ${{env.shared_lib_version}}
-          path: ${{env.shared_lib_path}}
-      - name: Upload shared actions
-        uses: actions/upload-artifact@v2
-        with:
-          name: shared
-          path: ${{env.shared_lib_path}}/actions
-          if-no-files-found: error
-          retention-days: 1
+#  checkout_shared_lib:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2 # https://github.com/actions/checkout
+#        with:
+#          repository: ${{env.shared_lib_repo}}
+#          ssh-key: ${{env.shared_lib_private_key}}
+#          ref: ${{env.shared_lib_version}}
+#          path: ${{env.shared_lib_path}}
+#      - name: Upload shared actions
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: shared
+#          path: ${{env.shared_lib_path}}/actions
+#          if-no-files-found: error
+#          retention-days: 1
   build_and_test:
     env:
       lib_path: $shared_lib_path
@@ -31,10 +31,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Download shared actions
-        uses: actions/download-artifact@v2
+      - name: Get shared actions
+        uses: actions/checkout@v2 # https://github.com/actions/checkout
         with:
-          name: shared
+          repository: ${{env.shared_lib_repo}}
+          ssh-key: ${{env.shared_lib_private_key}}
+          ref: ${{env.shared_lib_version}}
           path: ${{env.shared_lib_path}}
       - name: Build and Test
         id: build_and_test
@@ -64,10 +66,17 @@ jobs:
     needs: [ build_and_test, publish ]
     runs-on: ubuntu-latest
     steps:
-      - name: Download shared actions
-        uses: actions/download-artifact@v2
+#      - name: Download shared actions
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: shared
+#          path: ${{env.shared_lib_path}}
+      - name: Get shared actions
+        uses: actions/checkout@v2 # https://github.com/actions/checkout
         with:
-          name: shared
+          repository: ${{env.shared_lib_repo}}
+          ssh-key: ${{env.shared_lib_private_key}}
+          ref: ${{env.shared_lib_version}}
           path: ${{env.shared_lib_path}}
       - name: Slack Notify
         id: slack_notify
