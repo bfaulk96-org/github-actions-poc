@@ -24,6 +24,8 @@ jobs:
           path: "$shared_lib_path/actions"
           retention-days: 1
   build_and_test:
+    env:
+      lib_path: $shared_lib_path
     needs: [ checkout_shared_lib ]
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +37,7 @@ jobs:
           if-no-files-found: error
       - name: Build and Test
         id: build_and_test
-        uses: "$shared_lib_path/build-and-test"
+        uses: ${{ent.lib_path}}/build-and-test
   publish:
     if: ${{ github.github_ref == 'refs/heads/main' }}
     needs: [ build_and_test ]
@@ -60,6 +62,8 @@ jobs:
   slackNotify:
     needs: [ build_and_test, publish ]
     runs-on: ubuntu-latest
+    env:
+      lib_path: $shared_lib_path
     steps:
       - name: Download shared actions
         uses: actions/download-artifact@v2
@@ -68,4 +72,4 @@ jobs:
           if-no-files-found: error
       - name: Slack Notify
         id: slack_notify
-        uses: "$shared_lib_path/build-and-test"
+        uses: ${{ env.lib_path }}/build-and-test
