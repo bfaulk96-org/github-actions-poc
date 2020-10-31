@@ -18,8 +18,9 @@ jobs:
           node-version: 12
       - uses: daspn/private-actions-checkout@v2 # https://github.com/marketplace/actions/private-actions-checkout
         with:
-          actions_list: '["bfaulk96@github.com/bfaulk-org/.github@v1"]'
+          actions_list: '["github.com/bfaulk-org/.github@v1"]'
           checkout_base_path: ./.github/actions
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: COMPOSITE TEST
         id: composite_build
         uses: ./.github/actions/build-and-test
