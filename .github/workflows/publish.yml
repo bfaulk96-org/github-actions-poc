@@ -21,7 +21,7 @@ jobs:
           repository: bfaulk96-org/.github
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ref: v1
-          path: ./actions
+          path: ./.github/org-actions
 #      - uses: daspn/private-actions-checkout@v2 # https://github.com/marketplace/actions/private-actions-checkout
 #        with:
 #          actions_list: '["bfaulk96-org/.github@v1"]'
@@ -30,9 +30,9 @@ jobs:
       - name: COMPOSITE TEST
         id: composite_build
         run: ls -R .github
-#        uses: ./.github/actions/build-and-test
-#        with:
-#          who-to-greet: 'Mona the Octocat'
+        uses: ./.github/org-actions/build-and-test
+        with:
+          who-to-greet: 'Mona the Octocat'
       - name: Set Up NPM
         run: |
           npm config set registry https://registry.npmjs.org
