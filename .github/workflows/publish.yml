@@ -19,7 +19,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: bfaulk96-org/.github
-          token: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ref: v1
           path: ./actions
 #      - uses: daspn/private-actions-checkout@v2 # https://github.com/marketplace/actions/private-actions-checkout
 #        with:
