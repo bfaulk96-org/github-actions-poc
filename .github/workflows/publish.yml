@@ -1,14 +1,13 @@
 name: Publish
-
+env:
+  shared_lib_version: v1.1.0
+  shared_lib_path: ./.github/org-actions
+  shared_lib_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+  shared_lib_repo: bfaulk96-org/.github
 on:
   push:
     branches: [ main, develop, non-prod ]
 jobs:
-  env:
-    shared_lib_version: v1.1.0
-    shared_lib_path: ./.github/org-actions
-    shared_lib_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-    shared_lib_repo: bfaulk96-org/.github
   build_and_test:
     runs-on: ubuntu-latest
     steps:
