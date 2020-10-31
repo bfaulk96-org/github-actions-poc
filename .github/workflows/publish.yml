@@ -37,7 +37,7 @@ jobs:
           if-no-files-found: error
       - name: Build and Test
         id: build_and_test
-        uses: ${{ent.lib_path}}/build-and-test
+        uses: ${{env.lib_path}}/build-and-test
   publish:
     if: ${{ github.github_ref == 'refs/heads/main' }}
     needs: [ build_and_test ]
