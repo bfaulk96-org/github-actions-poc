@@ -20,7 +20,7 @@ jobs:
         with:
           actions_list: '["bfaulk96-org/.github@v1"]'
           checkout_base_path: ./.github/actions
-#          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: COMPOSITE TEST
         id: composite_build
         uses: ./.github/actions/build-and-test
