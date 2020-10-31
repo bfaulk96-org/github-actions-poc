@@ -25,9 +25,6 @@ jobs:
 #          if-no-files-found: error
 #          retention-days: 1
   build_and_test:
-    env:
-      lib_path: $shared_lib_path
-    needs: [ checkout_shared_lib ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
