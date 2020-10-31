@@ -4,19 +4,24 @@ on:
   push:
     branches: [ main, develop, non-prod ]
 jobs:
+  env:
+    shared_lib_version: v1.1.0
+    shared_lib_path: ./.github/org-actions
+    shared_lib_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+    shared_lib_repo: bfaulk96-org/.github
   build_and_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/checkout@v2 # https://github.com/actions/checkout
         with:
-          repository: bfaulk96-org/.github
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ref: v1
-          path: ./.github/org-actions
+          repository: $shared_lib_repo
+          ssh-key: $shared_lib_private_key
+          ref: $shared_lib_version
+          path: $shared_lib_path
       - name: Build and Test
         id: build_and_test
-        uses: ./.github/org-actions/actions/build-and-test
+        uses: ${shared_lib_path}/actions/build-and-test
   publish:
     if: ${{ github.github_ref == 'refs/heads/main' }}
     needs: [ build_and_test ]
@@ -44,10 +49,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2 # https://github.com/actions/checkout
         with:
-          repository: bfaulk96-org/.github
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ref: v1
-          path: ./.github/org-actions
+          repository: $shared_lib_repo
+          ssh-key: $shared_lib_private_key
+          ref: $shared_lib_version
+          path: $shared_lib_path
       - name: Slack Notify
         id: slack_notify
-        uses: ./.github/org-actions/actions/slack-notify
+        uses: ${shared_lib_path}/actions/slack-notify
